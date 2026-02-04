@@ -61,13 +61,15 @@ pipeline {
         echo "🔍 Sonar Analysis..."
 
         withSonarQubeEnv('sonar_integration') {
-            bat """
-            mvn sonar:sonar ^
-            -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
-            -Dsonar.projectName=${SONAR_PROJECT_NAME} ^
-            -Dsonar.host.url=http://localhost:9000 ^
-            -Dsonar.login=squ_e9aaa6bd7f22321ed1b7933b40396721368f2496
-            """
+            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                bat """
+                mvn sonar:sonar ^
+                -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
+                -Dsonar.projectName=${SONAR_PROJECT_NAME} ^
+                -Dsonar.host.url=${SONAR_HOST_URL} ^
+                -Dsonar.login=%SONAR_TOKEN%
+                """
+            }
         }
     }
 }
