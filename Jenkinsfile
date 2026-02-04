@@ -57,18 +57,21 @@ pipeline {
         }
 
         stage('SonarQube') {
-            steps {
-                echo "🔍 Sonar Analysis..."
+    steps {
+        echo "🔍 Sonar Analysis..."
 
-                withSonarQubeEnv('sonar_integration') {
-                    bat """
-                    mvn sonar:sonar ^
-                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
-                    -Dsonar.projectName=${SONAR_PROJECT_NAME}
-                    """
-                }
-            }
+        withSonarQubeEnv('sonar_integration') {
+            bat """
+            mvn sonar:sonar ^
+            -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
+            -Dsonar.projectName=${SONAR_PROJECT_NAME} ^
+            -Dsonar.host.url=%SONAR_HOST_URL% ^
+            -Dsonar.login=%SONAR_AUTH_TOKEN%
+            """
         }
+    }
+}
+
 
         stage('Quality Gate') {
             steps {
