@@ -26,14 +26,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo "🏗️ Build..."
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
                 echo "🧪 Testing..."
-                sh 'mvn test'
+                bat 'mvn test'
             }
 
             post {
@@ -46,7 +46,7 @@ pipeline {
         stage('Package') {
             steps {
                 echo "📦 Packaging..."
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
 
             post {
@@ -61,9 +61,9 @@ pipeline {
                 echo "🔍 Sonar Analysis..."
 
                 withSonarQubeEnv('sonar_integration') {
-                    sh """
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                    bat """
+                    mvn sonar:sonar ^
+                    -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
                     -Dsonar.projectName=${SONAR_PROJECT_NAME}
                     """
                 }
@@ -81,7 +81,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo "🐳 Docker Build..."
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
             }
         }
 
@@ -97,10 +97,10 @@ pipeline {
                   )
                 ]) {
 
-                    sh '''
-                    echo $PASS | docker login -u $USER --password-stdin
+                    bat """
+                    echo %PASS% | docker login -u %USER% --password-stdin
                     docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-                    '''
+                    """
                 }
             }
         }
