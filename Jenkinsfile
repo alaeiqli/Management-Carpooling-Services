@@ -56,23 +56,23 @@ pipeline {
             }
         }
 
-        stage('SonarQube') {
+       stage('SonarQube') {
     steps {
         echo "🔍 Sonar Analysis..."
 
-        withSonarQubeEnv('sonar_integration') {
-            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                bat """
-                mvn sonar:sonar ^
-                -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
-                -Dsonar.projectName=${SONAR_PROJECT_NAME} ^
-                -Dsonar.host.url=${SONAR_HOST_URL} ^
-                -Dsonar.login=%SONAR_TOKEN%
-                """
-            }
+        withCredentials([string(credentialsId: 'sonar-token1', variable: 'SONAR_TOKEN')]) {
+
+            bat """
+            mvn sonar:sonar ^
+            -Dsonar.projectKey=Management-Carpooling-Services ^
+            -Dsonar.projectName=Management-Carpooling-Services ^
+            -Dsonar.host.url=http://localhost:9000 ^
+            -Dsonar.login=%SONAR_TOKEN%
+            """
         }
     }
 }
+
 
 
         stage('Quality Gate') {
