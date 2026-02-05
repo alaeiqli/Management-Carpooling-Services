@@ -56,19 +56,21 @@ pipeline {
             }
         }
 
-       stage('SonarQube') {
+      stage('SonarQube') {
     steps {
         echo "🔍 Sonar Analysis..."
 
-        withCredentials([string(credentialsId: 'sonar-token1', variable: 'SONAR_TOKEN')]) {
-
-            bat """
-            mvn sonar:sonar ^
-            -Dsonar.projectKey=Management-Carpooling-Services ^
-            -Dsonar.projectName=Management-Carpooling-Services ^
-            -Dsonar.host.url=http://localhost:9000 ^
-            -Dsonar.login=%SONAR_TOKEN%
-            """
+        // Remplacez 'SonarQube' par le nom exact configuré dans Jenkins
+        withSonarQubeEnv('sonar_integration') { 
+            withCredentials([string(credentialsId: 'sonar-token1', variable: 'SONAR_TOKEN')]) {
+                bat """
+                mvn sonar:sonar ^
+                -Dsonar.projectKey=Management-Carpooling-Services ^
+                -Dsonar.projectName=Management-Carpooling-Services ^
+                -Dsonar.host.url=http://localhost:9000 ^
+                -Dsonar.login=%SONAR_TOKEN%
+                """
+            }
         }
     }
 }
