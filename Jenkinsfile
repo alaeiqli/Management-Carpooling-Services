@@ -60,30 +60,21 @@ pipeline {
     steps {
         echo "🔍 Sonar Analysis..."
 
-        // Remplacez 'SonarQube' par le nom exact configuré dans Jenkins
+        // 'sonar_integration' doit être EXACTEMENT le nom configuré dans Jenkins
         withSonarQubeEnv('sonar_integration') { 
-            withCredentials([string(credentialsId: 'sonar-token1', variable: 'SONAR_TOKEN')]) {
-                bat """
-                mvn sonar:sonar ^
-                -Dsonar.projectKey=Management-Carpooling-Services ^
-                -Dsonar.projectName=Management-Carpooling-Services ^
-                -Dsonar.host.url=http://localhost:9000 ^
-                -Dsonar.login=%SONAR_TOKEN%
-                """
-            }
+            bat "mvn sonar:sonar -Dsonar.projectKey=Management-Carpooling-Services -Dsonar.projectName=Management-Carpooling-Services"
         }
     }
 }
 
-
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
+stage('Quality Gate') {
+    steps {
+        timeout(time: 5, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
         }
+    }
+}
+
 
         stage('Docker Build') {
             steps {
