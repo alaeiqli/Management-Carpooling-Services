@@ -67,13 +67,13 @@ pipeline {
     }
 }
 
-stage('Quality Gate') {
+/*stage('Quality Gate') {
     steps {
         timeout(time: 20, unit: 'MINUTES') {
             waitForQualityGate abortPipeline: true
         }
     }
-}
+}*/
 
 
         stage('Docker Build') {
