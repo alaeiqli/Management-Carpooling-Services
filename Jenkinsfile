@@ -84,24 +84,25 @@ stage('Quality Gate') {
         }
 
         stage('Docker Push') {
-            steps {
-                echo "🚀 Docker Push..."
+    steps {
+        echo "🚀 Docker Push..."
 
-                withCredentials([
-                  usernamePassword(
-                    credentialsId: 'DockerHub',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
-                  )
-                ]) {
+        withCredentials([
+          usernamePassword(
+            credentialsId: 'DockerHub',
+            usernameVariable: 'USER',
+            passwordVariable: 'PASS'
+          )
+        ]) {
 
-                    bat """
-                    echo %PASS% | docker login -u %USER% --password-stdin
-                    docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-                    """
-                }
-            }
+            bat """
+            echo %PASS% | docker login -u %USER% --password-stdin
+            docker push %DOCKER_IMAGE%:%DOCKER_TAG%
+            """
         }
+    }
+}
+
     }
 
     post {
