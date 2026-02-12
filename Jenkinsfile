@@ -83,7 +83,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
+        /*stage('Docker Push') {
     steps {
         echo "🚀 Docker Push..."
 
@@ -101,7 +101,7 @@ pipeline {
             """
         }
     }
-}
+}*/
 
     }
 
